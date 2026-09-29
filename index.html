@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a6e2c">
+<title>EMM Fréquence</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loginScreen" class="screen active">
+  <div class="login-box">
+    <div class="login-logo">EMM</div>
+    <h1>ÉGLISE MESSIANIQUE MONDIALE</h1>
+    <h2>EMM RD CONGO</h2>
+    <p class="subtitle">Module I — Fréquences</p>
+    <div class="input-group">
+      <label>Mot de passe</label>
+      <input type="password" id="loginPassword" placeholder="Entrez le mot de passe" onkeypress="if(event.key==='Enter')login()">
+    </div>
+    <button class="btn-primary" onclick="login()">Se connecter</button>
+    <p id="loginError" class="error-msg"></p>
+  </div>
+</div>
+
+<div id="homeScreen" class="screen">
+  <header class="app-header">
+    <div class="header-logo">EMM</div>
+    <div><h1>EMM Fréquence</h1><p>Module I — Gestion des présences</p></div>
+    <button class="btn-logout" onclick="logout()">⏻</button>
+  </header>
+  <div class="home-content">
+    <div class="welcome-box">
+      <h2>👑 Administrateur Provincial</h2>
+      <p>Bienvenue dans le module de gestion des fréquences</p>
+    </div>
+    <h3 class="section-title">📢 Annonces</h3>
+    <div id="announcementsBox" class="announcements"><p>Aucune annonce.</p></div>
+    <h3 class="section-title">📊 Sections</h3>
+    <div class="modules-grid">
+      <div class="module-card" onclick="openSection('journaliere')">
+        <div class="module-icon">📅</div><h3>Journalière</h3><p>Participation</p>
+      </div>
+      <div class="module-card" onclick="openSection('mensuelle')">
+        <div class="module-icon">📆</div><h3>Mensuelle</h3><p>Fiche du mois</p>
+      </div>
+      <div class="module-card" onclick="openSection('rapports')">
+        <div class="module-icon">📊</div><h3>Rapports</h3><p>Global / Détaillé</p>
+      </div>
+      <div class="module-card" onclick="openSection('admin')">
+        <div class="module-icon">⚙️</div><h3>Admin</h3><p>Paramètres</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="journaliereScreen" class="screen">
+  <header class="app-header">
+    <button class="btn-back" onclick="goHome()">←</button>
+    <h1>Fréquence journalière</h1>
+  </header>
+  <div class="card">
+  <h3>📋 Liste des entités</h3>
+  <div id="listeEntites"></div>
+</div>
+  <div class="card">
+    <h3>➕ Enregistrer une entité</h3>
+    <div class="input-group"><label>Type d'entité</label>
+      <select id="jTypeEntite">
+        <option>Jorhei Center</option>
+        <option>Unité religieuse</option>
+        <option>Foyer de lumière</option>
+      </select>
+    </div>
+    <div class="input-group"><label>Nom de l'entité</label><input type="text" id="jNomEntite" placeholder="Ex : KELE-KELE"></div>
+    <div class="input-group"><label>Nom du responsable</label><input type="text" id="jResponsable"></div>
+    <button class="btn-primary" onclick="ajouterEntite()">Enregistrer l'entité</button>
+  </div>
+
+  <div class="card">
+    <h3>📋 Liste des entités</h3>
+    <div id="listeEntites"></div>
+  </div>
+
+  <div class="card">
+    <h3>📝 Participation journalière</h3>
+    <div class="input-group"><label>Entité</label><select id="jEntiteSelect"></select></div>
+    <div class="input-group"><label>Date</label><input type="date" id="jDate"></div>
+    <div class="input-group"><label>Membres</label><input type="number" id="jMembres" value="0"></div>
+    <div class="input-group"><label>Sympathisants</label><input type="number" id="jSympathisants" value="0"></div>
+    <div class="input-group"><label>Nouveaux venus</label><input type="number" id="jNouveaux" value="0"></div>
+    <button class="btn-primary" onclick="enregistrerParticipation()">Enregistrer la participation</button>
+  </div>
+  <div class="card"><h3>📋 Relevé de pointage journalier</h3><div id="listeJournaliere"></div></div>
+</div>
+
+<div id="mensuelleScreen" class="screen">
+  <header class="app-header">
+    <button class="btn-back" onclick="goHome()">←</button>
+    <h1>Fiche mensuelle</h1>
+  </header>
+  <div class="card">
+    <div class="input-group"><label>Entité</label><select id="mEntite"></select></div>
+    <div class="input-group"><label>Mois</label>
+      <select id="mMois">
+        <option>Janvier</option><option>Février</option><option>Mars</option>
+        <option>Avril</option><option>Mai</option><option>Juin</option>
+        <option>Juillet</option><option>Août</option><option>Septembre</option>
+        <option>Octobre</option><option>Novembre</option><option>Décembre</option>
+      </select>
+    </div>
+    <div class="input-group"><label>Année</label><input type="number" id="mAnnee" value="2026"></div>
+    <div class="input-group"><label>Responsable</label><input type="text" id="mResponsable"></div>
+
+    <h4>Présentation</h4>
+    <div class="input-group"><label>Nombre d'Encadreurs</label><input type="number" id="mEncadreurs" value="0"></div>
+    <div class="input-group"><label>Jour réunion d'évaluation</label>
+      <select id="mJourReunion">
+        <option>Lundi</option><option>Mardi</option><option>Mercredi</option>
+        <option>Jeudi</option><option>Vendredi</option><option>Samedi</option><option>Dimanche</option>
+      </select>
+    </div>
+    <div class="input-group"><label>Membres actifs</label><input type="number" id="mMembresActifs" value="0"></div>
+    <div class="input-group"><label>Sympathisants</label><input type="number" id="mSympathisants" value="0"></div>
+
+    <h4>Fréquentation culte mensuel</h4>
+    <div class="input-group"><label>Membres</label><input type="number" id="mFMembres" value="0"></div>
+    <div class="input-group"><label>Sympathisants</label><input type="number" id="mFSympathisants" value="0"></div>
+    <div class="input-group"><label>Nouveaux venus</label><input type="number" id="mFNouveaux" value="0"></div>
+
+    <h4>Activités</h4>
+    <div class="input-group"><label>Foyers Lumière accompagnés</label><input type="number" id="mFoyersLumiere" value="0"></div>
+    <div class="input-group"><label>Membres avec Goshintai</label><input type="number" id="mAvecGoshintai" value="0"></div>
+    <div class="input-group"><label>Membres sans Goshintai</label><input type="number" id="mSansGoshintai" value="0"></div>
+    <div class="input-group"><label>Foyers de sympathisants</label><input type="number" id="mFoyersSymp" value="0"></div>
+    <div class="input-group"><label>Fleurs distribuées</label><input type="number" id="mFleurs" value="0"></div>
+    <div class="input-group"><label>Potagers confectionnés</label><input type="number" id="mPotagers" value="0"></div>
+    <div class="input-group"><label>Total potagers unité</label><input type="number" id="mTotalPotagers" value="0"></div>
+    <div class="input-group"><label>Maisons ouvertes (fleurs)</label><input type="number" id="mMaisonsOuvertes" value="0"></div>
+    <div class="input-group"><label>Témoignages recueillis</label><input type="number" id="mTemoignages" value="0"></div>
+
+    <h4>Confirmation</h4>
+    <div class="input-group"><label>Candidats Goshintai</label><input type="number" id="mCandGoshintai" value="0"></div>
+    <div class="input-group"><label>Confirmés initiation</label><input type="number" id="mConfInit" value="0"></div>
+    <div class="input-group"><label>Confirmés ré-initiation</label><input type="number" id="mConfReinit" value="0"></div>
+    <div class="input-group"><label>Confirmés Shoku</label><input type="number" id="mConfShoku" value="0"></div>
+    <div class="input-group"><label>Confirmés Kannon</label><input type="number" id="mConfKannon" value="0"></div>
+    <div class="input-group"><label>Confirmés Mitamaya</label><input type="number" id="mConfMitamaya" value="0"></div>
+
+    <h4>Unités comptent</h4>
+    <div class="input-group"><label>Maisons des membres</label><input type="number" id="mMaisonsMembres" value="0"></div>
+    <div class="input-group"><label>Maisons des sympathisants</label><input type="number" id="mMaisonsSymp" value="0"></div>
+
+    <h4>Assistance religieuse</h4>
+    <div class="input-group"><label>Maisons membres assistées</label><input type="number" id="mAssistMembres" value="0"></div>
+    <div class="input-group"><label>Maisons sympathisants assistées</label><input type="number" id="mAssistSymp" value="0"></div>
+    <div class="input-group"><label>Concessions agricoles</label><input type="number" id="mConcessions" value="0"></div>
+    <div class="input-group"><label>Terrains de l'église</label><input type="number" id="mTerrains" value="0"></div>
+    <div class="input-group"><label>Concessions suivies</label><input type="number" id="mConcSuivies" value="0"></div>
+    <div class="input-group"><label>Font agriculture naturelle</label><input type="number" id="mAgriNat" value="0"></div>
+    <div class="input-group"><label>Produits disponibles</label><textarea id="mProduits" rows="2"></textarea></div>
+    <div class="input-group"><label>Campagnes nettoyage</label><input type="number" id="mCampagnes" value="0"></div>
+    <div class="input-group"><label>Fleurs distribuées (assist.)</label><input type="number" id="mFleursAssist" value="0"></div>
+
+    <h4>Formation</h4>
+    <div class="input-group"><label>Cours d'enseignements</label><input type="number" id="mCoursEns" value="0"></div>
+    <div class="input-group"><label>Thèmes exploités</label><textarea id="mThemes" rows="3"></textarea></div>
+    <div class="input-group"><label>Cours de fleurs unité</label><input type="number" id="mCoursFleurs" value="0"></div>
+    <div class="input-group"><label>Cours fleurs maisons messianiques</label><input type="number" id="mCoursFleursMess" value="0"></div>
+    <div class="input-group"><label>Cours fleurs maisons non messianiques</label><input type="number" id="mCoursFleursNonMess" value="0"></div>
+
+    <h4>Grâces reçues</h4>
+    <textarea id="mGraces" rows="3"></textarea>
+    <h4>Points à améliorer</h4>
+    <textarea id="mPoints" rows="3"></textarea>
+    <h4>Solutions proposées</h4>
+    <textarea id="mSolutions" rows="3"></textarea>
+    <h4>Objectifs du mois prochain</h4>
+    <textarea id="mObjectifs" rows="3"></textarea>
+    <h4>Actions à mener</h4>
+    <textarea id="mActions" rows="3"></textarea>
+
+    <button class="btn-primary" onclick="enregistrerFicheMensuelle()">Enregistrer la fiche</button>
+  </div>
+</div>
+
+<div id="rapportsScreen" class="screen">
+  <header class="app-header">
+    <button class="btn-back" onclick="goHome()">←</button>
+    <h1>Rapports</h1>
+  </header>
+  <div class="card">
+    <h3>🔍 Recherche d'entité</h3>
+    <input type="text" id="searchFreq" placeholder="Rechercher une entité..." oninput="rechercherFreq()">
+  </div>
+  <div class="card">
+    <button class="btn-primary" onclick="rapportFreqGlobal()">📊 Rapport Global</button>
+    <button class="btn-secondary" onclick="rapportFreqDetaille()">📋 Rapport Détaillé</button>
+    <button class="btn-secondary" onclick="rapportFreqArchive()">📦 Archives</button>
+    <button class="btn-secondary" onclick="imprimerRapport()">🖨️ Imprimer</button>
+    <button class="btn-secondary" onclick="exporterWord()">📄 Générer Word</button>
+    <button class="btn-secondary" onclick="exporterPDF()">📕 Générer PDF</button>
+    <button class="btn-secondary" onclick="partagerRapport()">📤 Envoyer (Email/WhatsApp)</button>
+  </div>
+  <div id="rapportBox" class="card"></div>
+</div>
+
+<div id="adminScreen" class="screen">
+  <header class="app-header">
+    <button class="btn-back" onclick="goHome()">←</button>
+    <h1>Administration</h1>
+  </header>
+  <div class="card">
+    <h3>🔑 Changer le mot de passe</h3>
+    <div class="input-group"><label>Nouveau mot de passe</label><input type="text" id="newPass"></div>
+    <button class="btn-primary" onclick="changerMotDePasse()">Enregistrer</button>
+  </div>
+  <div class="card">
+    <h3>📢 Publier une annonce</h3>
+    <textarea id="annonceText" rows="3"></textarea>
+    <button class="btn-primary" onclick="publierAnnonce()">Publier</button>
+  </div>
+  <div class="card">
+    <h3>📋 Gestion des annonces</h3>
+    <div id="adminAnnoncesList"></div>
+  </div>
+  <div class="card">
+    <h3>🔍 Recherche des activités par entité</h3>
+    <input type="text" id="searchAdmin" placeholder="Nom de l'entité..." oninput="rechercherAdmin()">
+    <div id="adminSearchResult" style="margin-top:10px"></div>
+  </div>
+  <div class="card">
+    <h3>💾 Sauvegarde / Restauration</h3>
+    <button class="btn-secondary" onclick="exporterDonnees()">📤 Exporter les données</button>
+    <div class="input-group">
+      <label>Collez ici un JSON pour restaurer</label>
+      <textarea id="importText" rows="4"></textarea>
+    </div>
+    <button class="btn-primary" onclick="restaurerTexte()">🔄 Restaurer depuis le texte</button>
+    <div class="input-group" style="margin-top:10px">
+      <label>Ou choisissez un fichier .json</label>
+      <input type="file" id="importFile" accept=".json,.txt" onchange="importerDonnees(event)">
+    </div>
+  </div>
+  <div class="card">
+    <h3>🗑️ Danger</h3>
+    <button class="btn-secondary" style="background:#ffebee;color:#c62828;border-color:#c62828" onclick="toutEffacer()">⚠️ Tout effacer</button>
+  </div>
+</div>
+
+<button id="installBtn" class="install-btn" style="display:none" onclick="installApp()">📲 Installer l'app</button>
+
+<script src="db.js"></script>
+<script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(function(e) { console.log('SW:', e); });
+}
+</script>
+</body>
+</html>
